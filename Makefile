@@ -49,11 +49,12 @@ build: dist
 install:
 	: ## $@
 	: ## Deploy orchestration target
-	docker volume create "$(NAME)"
+	docker volume create "$(NAME)-data"    ||:
+	docker volume create "$(NAME)-plugins" ||:
 	docker run \
 		-d \
 		--publish 25565:25565 \
 		--name "$(NAME)" \
-		--volume "$(NAME):/data" \
+		--volume "$(NAME)-data:/data" \
+		--volume "$(NAME)-plugins:/plugins" \
 		-- $(TARGET)
-
