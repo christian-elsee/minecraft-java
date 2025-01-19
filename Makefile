@@ -51,6 +51,7 @@ install:
 	: ## Deploy orchestration target
 	docker volume create "$(NAME)-data"    ||:
 	docker volume create "$(NAME)-plugins" ||:
+	docker rm -f $(NAME) ||:
 	docker run \
 		-d \
 		--publish 25565:25565 \
