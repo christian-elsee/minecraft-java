@@ -11,4 +11,31 @@ services:
       - "25565:25565"
       - "19132:19132/udp"
     volumes:
-      - ./data:/data
+      - store:/data
+
+  dnsmasq:
+    image: 4km3/dnsmasq:2.90-r3-alpine-latest
+    networks:
+      dns:
+        ipv4_address: 192.168.86.100
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "mco.lbsg.net:192.168.86.100"
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    cap_add:
+      - NET_ADMIN
+
+volumes:
+  store:
+
+networks:
+  dns:
+    driver: macvlan
+    driver_opts:
+      parent: enp4s0  # Replace eth0 with the correct network interface on your host
+    ipam:
+      config:
+        - subnet: 192.168.86.0/24  # Replace with the subnet of your LAN
+          gateway: 192.168.86.1
