@@ -9,14 +9,23 @@ SHELL := /bin/bash
 
 NAME := $(shell pwd | xargs basename)
 TARGET := itzg/minecraft-server:java21-alpine
+GEYSERVERSION := 2.6.0
 
 ## interface ####################################
 all: distclean dist check build
-init:
+init: assets assets/Geyser-Spigot.jar
 install:
 clean:  distclean
 
 ## workflow #####################################
+assets:
+	: ## $@
+	mkdir -p $@
+assets/Geyser-Spigot.jar:
+	: ## $@
+	curl https://download.geysermc.org/v2/projects/geyser/versions/2.6.0/builds/latest/downloads/spigot \
+		-sLD/dev/stderr \
+		-o $@
 
 distclean:
 	: ## $@
@@ -34,6 +43,8 @@ check:
 build: dist
 	: ## $@
 	: ## Build an orchestration target
+	mkdir $</plugins
+	rsync -av assets/Geyser-Spigot.jar $</plugins
 
 install:
 	: ## $@
