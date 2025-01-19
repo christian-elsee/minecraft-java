@@ -58,4 +58,5 @@ install:
 		--name "$(NAME)" \
 		--volume "$(NAME)-data:/data" \
 		--volume "$(NAME)-plugins:/plugins" \
+		--env "EULA=TRUE" \
 		-- $(TARGET)
